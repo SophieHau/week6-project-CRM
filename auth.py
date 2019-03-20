@@ -51,4 +51,17 @@ class Auth:
     def get_by_user_id(self, user_id):
         '''Get a row containing user info for the given user id.
         Return None if there is no matching user.'''
-        pass
+        db = Db()
+        user_id = (user_id,)
+        query = "SELECT * from user WHERE user_id = ?"
+        db.execute(query, user_id)
+        row = db.fetchone()
+        if row is None:
+            return None
+        return row
+
+
+
+
+
+

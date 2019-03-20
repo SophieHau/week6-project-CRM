@@ -2,7 +2,7 @@ from db import Db
 
 
 class Customer:
-    def __init__(self, first_name, last_name, phone, email,
+    def __init__(self, first_name, last_name, email, phone,
                  address1, address2, postal_code, city, country,
                  customer_id=None, added_by=None):
         self.first_name = first_name
@@ -20,7 +20,11 @@ class Customer:
     def save(self):
         '''If self has been populated by database data - UPDATE.
         Otherwise - INSERT a new record.'''
-        pass
+        db = Db()
+        data = (self.customer_id, self.first_name, self.last_name, self.email, self.phone, self.address1, self.address2, self.postal_code, self.city, self.country, self.added_by)
+        query = "INSERT INTO customer VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"
+        db.execute(query, data)
+        db.commit()
 
 
     def build_from_row(row):
