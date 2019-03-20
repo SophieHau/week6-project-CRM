@@ -1,0 +1,8 @@
+data/
+test.py
+install.bat
+install.sh
+run.bat
+run.sh
+env/
+__pycache__/
