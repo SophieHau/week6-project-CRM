@@ -37,10 +37,31 @@ class Customer:
     def get(customer_id):
         '''Get a single Customer object that corresponds to the customer id.
         If none found, return None.'''
-        pass
+        db = Db()
+        customer_id = (customer_id,)
+        query = "SELECT * from customer where customer_id = ?"
+        db.execute(query, customer_id)
+        customer = db.fetchone()
+        if customer is None:
+            return None
+        return customer
 
     # Note: this is a CLASS function (no self!)
     def get_all():
         '''Get a list of Customer objects - one for each row in the 
         relevant table in the database.'''
-        pass
+        db = Db()
+        query = "SELECT * from customer"
+        db.execute(query)
+        customers = db.fetchall()
+        return customers
+
+
+
+
+
+
+
+
+
+

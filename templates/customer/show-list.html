@@ -7,4 +7,27 @@ Show a list of all customers, ordered by last name and first name.
 Clicking on each customer in the list should take you to a page to view the customer record in detail.
 #}
 
+<div class="container">
+	<div class="row mt-5 mb-3">
+		<h3>Customers</h3>
+		<a class="btn btn-primary ml-3" href="#" role="button">Add</a>
+	</div>
+</div>
+<div class="container">
+	<div class="row">
+		<div class="col-10 pl-5 ml-5">
+			{% for customer in customers %}
+			<div class="list-group mt-3">
+				<a href="{{ url_for('show_customer', customer_id = customer.customer_id) }}" class="list-group-item list-group-item-action">
+					<div class="d-flex w-100 justify-content-between">
+      					<h5 class="mb-1"><img src="{{ url_for('static', filename='icons/person.svg') }}" class="mr-3">{{ customer.first_name }} {{customer.last_name }}</h5>
+      					<h5>{{ customer.email }}</h5>
+				    </div>
+				</a>
+			</div>
+			{% endfor %}
+		</div>
+	</div>
+</div>
+
 {% endblock %}

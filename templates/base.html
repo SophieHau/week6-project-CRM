@@ -24,8 +24,12 @@
         <span class="text-light mr-3">{{ session['username'] }}</span>
         <a class="" href="{{ url_for('logout') }}">Logout</a>
       </div>
+    
     {% else %}
-
+      <div>
+        <a class="" href="{{ url_for('login') }}">Login</a>
+      </div>
+    
     {% endif %}
   </nav>
   {% block content %}{% endblock %}

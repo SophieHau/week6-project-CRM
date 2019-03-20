@@ -4,4 +4,52 @@
 {# Show the customer's record. Also show the list of calls.
 Also allow the user to add a new call for this customer. #}
 
+<div class="container">
+	<div class="row mt-5 mb-3">
+		<h3>{{ customer.first_name }} {{ customer.last_name }}</h3>
+		<a class="btn btn-primary ml-3" href="#" role="button">Edit</a>
+	</div>
+	<div class="row">
+		<div class="col-3">
+			<table class="table-sm table table-borderless mt-3">
+			    <tr>
+			      <td>Name:</td>
+			      <td class="pl-3">{{ customer.first_name }} {{ customer.last_name }}</td>
+			    </tr>
+			    <tr>
+			      <td>Email:</td>
+			      <td class="pl-3">{{ customer.email }}</td>
+			    </tr>
+			    <tr>
+			      <td>Phone:</td>
+			      <td class="pl-3">{{ customer.phone }}</td>
+			    </tr>
+			    <tr>
+			      <td>Address 1:</td>
+			      <td class="pl-3">{{ customer.address1 }}</td>
+			    </tr>
+			    <tr>
+			      <td>Adress2:</td>
+			      <td class="pl-3">{{ customer.address2 }}</td>
+			    </tr>
+			    <tr>
+			      <td>Postal Code:</td>
+			      <td class="pl-3">{{ customer.postal_code }}</td>
+			    </tr>
+			    <tr>
+			      <td>City:</td>
+			      <td class="pl-3">{{ customer.city }}</td>
+			    </tr>
+			    <tr>
+			      <td>Country:</td>
+			      <td class="pl-3">{{ customer.country }}</td>
+			    </tr>
+			</table>
+
+		<div class="col-6">
+			
+		</div>
+	</div>
+</div>
+
 {% endblock %}

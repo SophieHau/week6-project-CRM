@@ -14,7 +14,10 @@ app.secret_key = b'J.;0ajk>,m8jkLIn89hans*jkj90($'
 def check_for_logged_in():
     '''Check if there is a user currently logged in.
     If not, redirect to the login page. Otherwise do nothing.'''
-    pass
+    auth = Auth()
+    if auth.is_logged_in() == False:
+        return redirect(url_for('login'))
+
 
 def check_for_valid_customer_id(customer_id):
     '''Check if the given customer ID matches up to an 
@@ -22,7 +25,6 @@ def check_for_valid_customer_id(customer_id):
     page.'''
     pass
 
-@app.route("/")
 @app.route("/login/", methods=["POST", "GET"])
 def login():
     if request.method == 'POST':
@@ -43,6 +45,7 @@ def logout():
     return redirect(url_for('login'))
 
 
+@app.route("/")
 @app.route("/customers/")
 def show_customers():
     check_for_logged_in()
@@ -83,7 +86,10 @@ def show_customer(customer_id):
     Get customer object that matches the given customer id.
     Get a list of calls that are associated with the given customer id.
     Render the 'customer/show-one.html' template with the above data.'''
-    pass
+    check_for_logged_in()
+    customer = Customer.get(customer_id)
+    return render_template('customer/show-one.html', customer=customer)
+
 
 
 @app.route("/calls/add/", methods=['POST'])
