@@ -15,8 +15,10 @@ def check_for_logged_in():
     '''Check if there is a user currently logged in.
     If not, redirect to the login page. Otherwise do nothing.'''
     auth = Auth()
-    if auth.is_logged_in() == False:
-        return redirect(url_for('login'))
+    if auth.is_logged_in():
+        return True
+    else:
+        return False
 
 
 def check_for_valid_customer_id(customer_id):
@@ -48,9 +50,11 @@ def logout():
 @app.route("/")
 @app.route("/customers/")
 def show_customers():
-    check_for_logged_in()
-    customers = Customer.get_all()
-    return render_template('customer/show-list.html', customers=customers)
+    if check_for_logged_in() == True:
+        customers = Customer.get_all()
+        return render_template('customer/show-list.html', customers=customers)
+    else:
+        return redirect(url_for('login'))
 
 
 @app.route("/customers/add/", methods=['GET', 'POST'])
@@ -63,7 +67,31 @@ def add_customer():
     3. Create a new Customer object with all the above data.
     4. Save it to the database.
     5. Redirect to the /customers/ page.'''
-    pass
+    if check_for_logged_in() == True:
+    
+        if request.method == 'POST':
+            first_name = request.form.get('first_name')
+            last_name = request.form.get('last_name')
+            email = request.form.get('email')
+            phone = request.form.get('phone')
+            address1 = request.form.get('address1')
+            address2 = request.form.get('address2')
+            postal_code = request.form.get('postal_code')
+            city = request.form.get('city')
+            country = request.form.get('country')
+            customer_id = None
+
+            auth = Auth()
+            current_user = auth.get_current_user()
+            user_id = current_user['user_id']
+            c = Customer(first_name, last_name, email, phone, address1, address2, postal_code, city, country, customer_id, user_id)
+            c.save()
+            return redirect(url_for('show_customers'))
+
+        return render_template('customer/add.html')
+    
+    else:
+        return redirect(url_for('login'))
 
 @app.route("/customers/<int:customer_id>/edit/", methods=['GET', 'POST'])
 def edit_customer(customer_id):
@@ -86,9 +114,11 @@ def show_customer(customer_id):
     Get customer object that matches the given customer id.
     Get a list of calls that are associated with the given customer id.
     Render the 'customer/show-one.html' template with the above data.'''
-    check_for_logged_in()
-    customer = Customer.get(customer_id)
-    return render_template('customer/show-one.html', customer=customer)
+    if check_for_logged_in() == True:
+        customer = Customer.get(customer_id)
+        return render_template('customer/show-one.html', customer=customer)
+    else:
+        return redirect(url_for('login'))
 
 
 
