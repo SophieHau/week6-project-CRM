@@ -22,10 +22,17 @@ def check_for_logged_in():
 
 
 def check_for_valid_customer_id(customer_id):
+
     '''Check if the given customer ID matches up to an 
     actual customer record. If not, redirect to the /customers/
     page.'''
-    pass
+    customers = Customer.get_all()
+    for customer in customers:
+        if customer_id == customer['customer_id']:
+            return True
+        else:
+            return False
+
 
 @app.route("/login/", methods=["POST", "GET"])
 def login():
@@ -142,14 +149,18 @@ def show_customer(customer_id):
     Render the 'customer/show-one.html' template with the above data.'''
     if check_for_logged_in() == True:
         customer = Customer.get(customer_id)
-        return render_template('customer/show-one.html', customer=customer)
+        auth = Auth()
+        current_user = auth.get_current_user()
+        user_id = current_user['user_id']
+        calls = Call.get_for_customer(customer_id, user_id)
+        return render_template('customer/show-one.html', customer=customer, calls=calls)
     else:
         return redirect(url_for('login'))
 
 
 
-@app.route("/calls/add/", methods=['POST'])
-def add_call():
+@app.route("/calls/<int:customer_id>/add/", methods=['POST'])
+def add_call(customer_id):
     '''Check for logged in user. Check for valid customer id.
     Get customer object that matches the given customer id.
     Get the user_id of the currently logged-in user.
@@ -157,4 +168,24 @@ def add_call():
     Get the notes from the POST request.
     Use the above data to create a new Call object. Save it.
     Redirect to the /customers/<customer_id>/ page.'''
-    pass
+    if check_for_logged_in() == True:
+        if check_for_valid_customer_id(customer_id) == True:
+            customer_id = customer_id
+            c = Customer.get(customer_id)
+
+            auth = Auth()
+            current_user = auth.get_current_user()
+            user_id = current_user['user_id']
+
+            current_dt = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+            note = request.form.get('note')
+            call_id = None
+
+            new_call = Call(current_dt, note, call_id, customer_id, user_id)
+            new_call.save()
+            return redirect(url_for('show_customer', customer_id=customer_id))
+        else:
+            return redirect(url_for('show_customers'))
+    else:
+        return redirect(url_for('login'))
+
