@@ -21,10 +21,23 @@ class Customer:
         '''If self has been populated by database data - UPDATE.
         Otherwise - INSERT a new record.'''
         db = Db()
-        data = (self.customer_id, self.first_name, self.last_name, self.email, self.phone, self.address1, self.address2, self.postal_code, self.city, self.country, self.added_by)
-        query = "INSERT INTO customer VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"
-        db.execute(query, data)
-        db.commit()
+        data = (self.first_name, self.last_name, self.email, self.phone, 
+                self.address1, self.address2, self.postal_code, self.city, 
+                self.country, self.added_by, self.customer_id)
+        if self.customer_id is not None:
+            query = '''UPDATE customer 
+                    SET first_name = ?, last_name = ?, email = ?,
+                     phone = ?, address1 = ?, address2 = ?, postal_code = ?, 
+                     city = ?, country = ?, user_id = ?
+                     WHERE customer_id = ?
+                     '''
+            db.execute(query, data)
+            db.commit()
+        else:
+            data = (self.customer_id, self.first_name, self.last_name, self.email, self.phone, self.address1, self.address2, self.postal_code, self.city, self.country, self.added_by)
+            query = "INSERT INTO customer VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"
+            db.execute(query, data)
+            db.commit()
 
 
     def build_from_row(row):
