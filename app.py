@@ -105,7 +105,33 @@ def edit_customer(customer_id):
        from the POST request.
     4. Save the customer object.
     5. Redirect to /customers/ page.'''
-    pass
+    if check_for_logged_in() == True:
+
+        if request.method == 'POST':
+            first_name = request.form.get('first_name')
+            last_name = request.form.get('last_name')
+            email = request.form.get('email')
+            phone = request.form.get('phone')
+            address1 = request.form.get('address1')
+            address2 = request.form.get('address2')
+            postal_code = request.form.get('postal_code')
+            city = request.form.get('city')
+            country = request.form.get('country')
+            customer_id = customer_id
+            auth = Auth()
+            current_user = auth.get_current_user()
+            user_id = current_user['user_id']
+
+            customer = Customer(first_name, last_name, email, phone, address1, address2, postal_code, city, country, customer_id, user_id)
+            customer.save()
+            return redirect(url_for('show_customers')) 
+        
+        customer = Customer.get(customer_id)
+        return render_template('customer/edit.html', customer=customer)
+
+    else:
+        return redirect(url_for('login'))
+    
 
 
 @app.route("/customers/<int:customer_id>/")
