@@ -37,7 +37,8 @@ class Call:
                     JOIN user
                     ON user.user_id = phone_call.user_id
                     WHERE customer_id = ?
-                    AND phone_call.user_id = ?'''
+                    AND phone_call.user_id = ?
+                    ORDER BY phone_call.date_and_time DESC'''
             db.execute(query, (customer_id, include_user))
             calls = db.fetchall()
         else:

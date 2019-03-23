@@ -26,12 +26,11 @@ def check_for_valid_customer_id(customer_id):
     '''Check if the given customer ID matches up to an 
     actual customer record. If not, redirect to the /customers/
     page.'''
-    customers = Customer.get_all()
-    for customer in customers:
-        if customer_id == customer['customer_id']:
-            return True
-        else:
-            return False
+    customer = Customer.get(customer_id)
+    if customer_id == customer['customer_id']:
+        return True
+    else:
+        return False
 
 
 @app.route("/login/", methods=["POST", "GET"])
